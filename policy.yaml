@@ -1,0 +1,31 @@
+schema_version: "v1.0"
+policy_id: SecEng-CoreTemplates-policy
+permitted_actions:
+  - read-template
+  - generate-project
+  - run-tests
+blocked_actions:
+  - embed-secrets-in-template
+  - generate-without-mission-manifest
+  - publish-template-without-review
+data_rules:
+  - data_class: public
+    allowed_destinations:
+      - local-workspace
+      - ci-runner
+      - public-repo
+destination_rules:
+  - destination: local-workspace
+    mode: allow
+    reason: Local template generation is in scope.
+  - destination: ci-runner
+    mode: allow
+    reason: CI validation of generated projects is in scope.
+  - destination: public-repo
+    mode: allow
+    reason: Templates are public reference scaffolds by design.
+approval_rules:
+  - trigger: template schema changes
+    required_approver: human-owner
+  - trigger: new language template addition
+    required_approver: human-owner

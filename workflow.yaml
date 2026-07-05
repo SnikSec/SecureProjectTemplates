@@ -1,0 +1,30 @@
+schema_version: "v1.0"
+workflow_id: SecEng-CoreTemplates-workflow
+complexity_level: chained
+stages:
+  - stage_id: stage-001
+    name: install-dependencies
+    actor: local-runner
+    allowed_actions:
+      - install-requirements
+    retries: 1
+    requires_human_approval: false
+  - stage_id: stage-002
+    name: generate-project
+    actor: local-runner
+    allowed_actions:
+      - generate-project
+    retries: 1
+    requires_human_approval: false
+  - stage_id: stage-003
+    name: validate-generated-project
+    actor: local-runner
+    allowed_actions:
+      - run-tests
+    retries: 1
+    requires_human_approval: false
+stop_conditions:
+  max_iterations: 5
+  max_writes: 10
+  halt_on_policy_fail: true
+  halt_on_challenge_fail: false
