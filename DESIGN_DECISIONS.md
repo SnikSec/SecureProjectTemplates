@@ -40,3 +40,14 @@
 - Tradeoffs: None significant.
 - Affected components: templates/python-secure/tests/test_template.py, tests/ (new), Makefile.
 - Follow-up: Wire `make test` into CI for both this repo and generated projects' own CI workflow (portfolio task step 4).
+
+## 2026-07-05 - Add real security scanning: Gitleaks + Semgrep (this repo and generated projects)
+- Status: accepted
+- Area: tooling
+- Decision: Two separate changes. (1) This repo's own `.github/workflows/security-scan.yml`: a `gitleaks` job (`gitleaks/gitleaks-action@v2`, `fetch-depth: 0`) and a `semgrep` job (`semgrep scan --config=p/default --severity=ERROR --error`). Added a `security-scan` stage (stage-004) to this repo's own root workflow.yaml. (2) `templates/python-secure/.github/workflows/seceng-gate.yml` (the CI file shipped to every generated project) gained the same two jobs, since this repo's own README/MVP-scope already claimed "Generated .github/workflows with embedded security checks" — a claim that was not actually true before this change (the shipped gate only ran harness/policy/devils-advocate jobs, no scanning at all). Regenerated `generated/example-secure-app` to pick up the updated gate file.
+- Why: Closing the claims-vs-reality gap this whole session is about — this repo's own documentation asserted security checks were already baked into generated projects, and they were not.
+- Alternatives considered: Only adding scanning to this repo's own CI and leaving the template gate as a separate follow-up (rejected: the template gate was the more consequential gap, since every future generated project inherits it, and the fix was small enough to do in the same pass).
+- Tradeoffs: None significant.
+- Affected components: .github/workflows/security-scan.yml (new, this repo), templates/python-secure/.github/workflows/seceng-gate.yml, workflow.yaml (this repo's root), generated/example-secure-app/.
+- Verification: Ran `semgrep scan --config=p/default --severity=ERROR --error` (isolated venv) against this repo directly: 0 findings, exit code 0. Confirmed the same command/flags exit 1 against a deliberately vulnerable scratch file. Re-validated generated/example-secure-app's mission.yaml/policy.yaml/workflow.yaml against live SecEng-Contracts schemas after regeneration (still VALID). Gitleaks itself was not executed locally (binary execution from a self-chosen download was blocked by this session's safeguards); relying on the official action's documented behavior instead.
+- Follow-up: Wire security-scan into the same CI surface as lint/test/self-check for this repo (portfolio task step 4).
