@@ -62,3 +62,11 @@
 - Affected components: requirements.txt, .flake8 (new), Makefile, src/seceng_templates/cli.py and generator.py (unused import/f-string fixes, no behavior change), .github/workflows/validate.yml (new).
 - Verification: `flake8 src/` (isolated venv): 0 findings after the fix (was 3 before). `python -m unittest discover -s tests` (this repo's own generator tests): still 6/6 passing. Simulated the self-check job's directory layout locally and applied the same `--schema` fix documented in SecEng-Harness's DESIGN_DECISIONS.md. Confirmed VALID + NO DRIFT against this repo's own mission.yaml.
 - Follow-up: Once the GitHub App is provisioned, re-run this workflow for real and confirm the self-check job goes green end-to-end.
+
+## 2026-07-05 - Fix corrupted SIBLING_APPS_PRIVATE_KEY secret
+- Status: accepted
+- Area: tooling
+- Decision: Same incident and fix as documented in full in SecEng-Harness's matching 2026-07-05 entry: the private key secret, pasted by hand into the GitHub UI, was corrupted and caused `error:1E08010C:DECODER routines::unsupported` when minting the sibling-repo token. Re-set via `gh secret set SIBLING_APPS_PRIVATE_KEY --repo SnikSec/SecEng-CoreTemplates < path/to/key.pem` (piping the file directly, no manual paste).
+- Affected components: `SIBLING_APPS_PRIVATE_KEY` secret.
+- Verification: `gh run rerun --failed` after the fix: `self-check` passes, with real `VALID`/`NO DRIFT` output and an informational `DECISION: ALLOW`.
+- Follow-up: If this key is ever rotated, always use `gh secret set ... < file`, never paste manually -- see SecEng-Harness's DESIGN_DECISIONS.md for the full reasoning.
