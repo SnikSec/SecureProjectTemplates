@@ -1,0 +1,23 @@
+stages:
+  - name: build
+    tasks:
+      - type: install
+        command: pip install -r requirements.txt
+      - type: lint
+        command: make lint
+  - name: test
+    tasks:
+      - type: test
+        command: make test
+  - name: validate
+    tasks:
+      - type: harness
+        command: python ../SecEng-Harness/tools/validate_mission.py validate-mission --mission mission.yaml
+      - type: policy
+        command: python ../SecEng-PolicyEngine/tools/evaluate_policy.py evaluate --policy policy.yaml --risk-tier low
+  - name: release
+    conditions:
+      - all-checks-passed
+    tasks:
+      - type: tag
+        command: git tag -a v${VERSION}

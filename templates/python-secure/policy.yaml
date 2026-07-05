@@ -1,0 +1,11 @@
+repo_id: TEMPLATE_PROJECT_NAME
+risk_tier: low
+approval_triggers:
+  - high-risk design changes
+  - external integrations
+rules:
+  - action_category: write
+    risk_tier: low
+    decision: allow
+  - action_category: external-call
+    decision: escalate

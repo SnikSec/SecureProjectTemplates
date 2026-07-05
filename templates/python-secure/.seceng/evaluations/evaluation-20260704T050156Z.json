@@ -1,0 +1,26 @@
+{
+  "run_id": "run-4ea0587e",
+  "timestamp": "2026-07-04T05:01:56.174303+00:00",
+  "repo_path": "C:\\Users\\Jerem\\Git\\SecEng-Portfolio\\SecEng-CoreTemplates\\templates\\python-secure",
+  "risk_tier": "low",
+  "commands": {
+    "harness": {
+      "command": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\Jerem\\Git\\SecEng-Harness\\tools\\validate_mission.py validate-mission --mission C:\\Users\\Jerem\\Git\\SecEng-Portfolio\\SecEng-CoreTemplates\\templates\\python-secure\\mission.yaml",
+      "exit_code": "2",
+      "stdout": "",
+      "stderr": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe: can't open file 'C:\\\\Users\\\\Jerem\\\\Git\\\\SecEng-Harness\\\\tools\\\\validate_mission.py': [Errno 2] No such file or directory"
+    },
+    "policy_engine": {
+      "command": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\Jerem\\Git\\SecEng-PolicyEngine\\tools\\evaluate_policy.py evaluate --policy C:\\Users\\Jerem\\Git\\SecEng-Portfolio\\SecEng-CoreTemplates\\templates\\python-secure\\policy.yaml --risk-tier low --action-category write --mission C:\\Users\\Jerem\\Git\\SecEng-Portfolio\\SecEng-CoreTemplates\\templates\\python-secure\\mission.yaml",
+      "exit_code": "2",
+      "stdout": "",
+      "stderr": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe: can't open file 'C:\\\\Users\\\\Jerem\\\\Git\\\\SecEng-PolicyEngine\\\\tools\\\\evaluate_policy.py': [Errno 2] No such file or directory"
+    },
+    "devils_advocate": {
+      "command": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\Jerem\\Git\\SecEng-DevilsAdvocate\\tools\\challenge.py challenge --recommendation C:\\Users\\Jerem\\Git\\SecEng-DevilsAdvocate\\examples\\recommendation.yaml",
+      "exit_code": "2",
+      "stdout": "",
+      "stderr": "C:\\Users\\Jerem\\AppData\\Local\\Programs\\Python\\Python312\\python.exe: can't open file 'C:\\\\Users\\\\Jerem\\\\Git\\\\SecEng-DevilsAdvocate\\\\tools\\\\challenge.py': [Errno 2] No such file or directory"
+    }
+  }
+}
