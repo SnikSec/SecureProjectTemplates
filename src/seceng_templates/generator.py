@@ -1,6 +1,5 @@
 """Secure template generation logic."""
 from pathlib import Path
-from typing import Dict, Any
 import shutil
 
 

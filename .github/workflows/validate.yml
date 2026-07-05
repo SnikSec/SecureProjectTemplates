@@ -1,0 +1,104 @@
+name: Validate
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: make lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: make test
+
+  self-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          path: self
+
+      # Requires a GitHub App installed on SnikSec/SecEng-Harness,
+      # SnikSec/SecEng-PolicyEngine, and SnikSec/SecEng-Contracts with
+      # Contents: Read-only, and its App ID / private key stored as the
+      # secrets below. See DESIGN_DECISIONS.md for why this is a GitHub
+      # App token rather than a personal access token.
+      - name: Mint sibling-repo access token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
+          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
+          owner: SnikSec
+          repositories: SecEng-Harness,SecEng-PolicyEngine,SecEng-Contracts
+
+      - name: Checkout SecEng-Harness
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/SecEng-Harness
+          token: ${{ steps.app-token.outputs.token }}
+          path: harness
+
+      - name: Checkout SecEng-PolicyEngine
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/SecEng-PolicyEngine
+          token: ${{ steps.app-token.outputs.token }}
+          path: policy-engine
+
+      - name: Checkout SecEng-Contracts
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/SecEng-Contracts
+          token: ${{ steps.app-token.outputs.token }}
+          path: contracts
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Harness dependencies
+        run: pip install -r harness/requirements.txt
+
+      - name: Install PolicyEngine dependencies
+        run: pip install -r policy-engine/requirements.txt
+
+      - name: Harness self-check -- schema validation (blocking)
+        # --schema is explicit because Harness's own default
+        # (../SecEng-Contracts/schemas/...) is a relative path that assumes
+        # CWD is the Harness repo itself; that assumption does not hold in
+        # this job's checked-out-siblings layout.
+        run: |
+          python harness/tools/validate_mission.py validate-mission \
+            --mission self/mission.yaml \
+            --schema contracts/schemas/repo-mission.schema.json
+
+      - name: Harness self-check -- scope drift (blocking)
+        run: python harness/tools/validate_mission.py detect-drift --mission self/mission.yaml
+
+      - name: PolicyEngine self-check -- decision (informational)
+        # ESCALATE/ALLOW are both correct, expected decisions depending on
+        # risk_tier under this program's no-write-automation policy -- this
+        # step is informational only, not a CI failure gate.
+        continue-on-error: true
+        run: |
+          python policy-engine/tools/evaluate_policy.py evaluate \
+            --policy self/policy.yaml --mission self/mission.yaml \
+            --action-category write --risk-tier low

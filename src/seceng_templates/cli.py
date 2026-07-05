@@ -21,7 +21,7 @@ def generate(
         print(f"Location: {output_dir / project_name}")
         return 0
     else:
-        print(f"ERROR: Failed to generate project")
+        print("ERROR: Failed to generate project")
         return 1
 
 
