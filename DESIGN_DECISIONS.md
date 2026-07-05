@@ -51,3 +51,14 @@
 - Affected components: .github/workflows/security-scan.yml (new, this repo), templates/python-secure/.github/workflows/seceng-gate.yml, workflow.yaml (this repo's root), generated/example-secure-app/.
 - Verification: Ran `semgrep scan --config=p/default --severity=ERROR --error` (isolated venv) against this repo directly: 0 findings, exit code 0. Confirmed the same command/flags exit 1 against a deliberately vulnerable scratch file. Re-validated generated/example-secure-app's mission.yaml/policy.yaml/workflow.yaml against live SecEng-Contracts schemas after regeneration (still VALID). Gitleaks itself was not executed locally (binary execution from a self-chosen download was blocked by this session's safeguards); relying on the official action's documented behavior instead.
 - Follow-up: Wire security-scan into the same CI surface as lint/test/self-check for this repo (portfolio task step 4).
+
+## 2026-07-05 - Add lint job and CI parity: .github/workflows/validate.yml (lint, test, harness/policy self-check)
+- Status: accepted
+- Area: tooling
+- Decision: Added `flake8==7.1.1` to requirements.txt, a `.flake8` config (`max-line-length = 100`, excluding `templates/` and `generated/` since those are shipped/generated content, not this repo's own source), and a `make lint` target. Fixed the real findings flake8 turned up in this repo's own `src/` (an f-string with no placeholders, and two unused `typing` imports in generator.py). Added `.github/workflows/validate.yml` with `lint`, `test`, and `self-check` jobs, following the same pattern as the other three repos in this batch (see SecEng-Harness's matching 2026-07-05 entry for the full GitHub App rationale).
+- Why: Same as the other three repos in this batch -- closing the CI-parity gap and giving this repo the same lint/test/self-check coverage as its siblings.
+- Alternatives considered: same as SecEng-Harness's matching entry.
+- Tradeoffs: The self-check job cannot pass in CI until the GitHub App is actually provisioned. Excluding `templates/` from lint means the reference template's own `src/` is not style-checked by this repo's CI; acceptable since the template is scaffold content copied verbatim into generated projects, not code this repo executes directly.
+- Affected components: requirements.txt, .flake8 (new), Makefile, src/seceng_templates/cli.py and generator.py (unused import/f-string fixes, no behavior change), .github/workflows/validate.yml (new).
+- Verification: `flake8 src/` (isolated venv): 0 findings after the fix (was 3 before). `python -m unittest discover -s tests` (this repo's own generator tests): still 6/6 passing. Simulated the self-check job's directory layout locally and applied the same `--schema` fix documented in SecEng-Harness's DESIGN_DECISIONS.md. Confirmed VALID + NO DRIFT against this repo's own mission.yaml.
+- Follow-up: Once the GitHub App is provisioned, re-run this workflow for real and confirm the self-check job goes green end-to-end.

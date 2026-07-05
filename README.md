@@ -27,6 +27,7 @@ Planned next capabilities:
 - `tests/`: Real unit tests for `TemplateGenerator` itself (this repo's own generation logic). Run with `make test`. Distinct from `templates/python-secure/tests/`, which ships to every generated project and now asserts real governance-file structure instead of `assertTrue(True)`.
 - `.github/workflows/security-scan.yml`: Gitleaks (secret scanning) and Semgrep (SAST, `p/default` ruleset) run on every push/PR against this repo; fails on any Gitleaks hit or ERROR-severity Semgrep finding.
 - `templates/python-secure/.github/workflows/seceng-gate.yml`: now also runs Gitleaks and Semgrep in every generated project, matching this repo's own MVP-scope claim of "embedded security checks."
+- `.github/workflows/validate.yml`: `lint` (`make lint`, flake8), `test` (`make test`), and `self-check` (Harness validates this repo's own mission.yaml, plus an informational PolicyEngine decision). **Requires a GitHub App installed on SnikSec/SecEng-Harness, SecEng-PolicyEngine, and SecEng-Contracts** (Contents: Read-only) with `SIBLING_APPS_APP_ID` / `SIBLING_APPS_PRIVATE_KEY` secrets — see SecEng-Harness's README for the same note.
 
 ## Quick Start
 
