@@ -41,12 +41,13 @@ class TemplateGenerator:
 
     def _update_metadata(self, project_dir: Path, project_name: str):
         """Update project name in configuration files."""
-        # Update mission.yaml
-        mission_path = project_dir / "mission.yaml"
-        if mission_path.exists():
-            content = mission_path.read_text()
-            content = content.replace("TEMPLATE_PROJECT_NAME", project_name)
-            mission_path.write_text(content)
+        # Update mission.yaml, policy.yaml, workflow.yaml
+        for governance_file in ("mission.yaml", "policy.yaml", "workflow.yaml"):
+            path = project_dir / governance_file
+            if path.exists():
+                content = path.read_text()
+                content = content.replace("TEMPLATE_PROJECT_NAME", project_name)
+                path.write_text(content)
 
         # Update README
         readme_path = project_dir / "README.md"

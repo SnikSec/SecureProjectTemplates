@@ -24,6 +24,7 @@ Planned next capabilities:
 - `templates/python-secure/`: Reference Python template (its own mission.yaml/policy.yaml/workflow.yaml are scaffold content shipped to generated projects, not this repo's self-hosting files).
 - `tools/`: Operational scripts and wrappers.
 - `mission.yaml`, `policy.yaml`, `workflow.yaml` (repo root): This repo's own self-hosted governance files, risk_tier `low` (static scaffolding, no gating authority).
+- `tests/`: Real unit tests for `TemplateGenerator` itself (this repo's own generation logic). Run with `make test`. Distinct from `templates/python-secure/tests/`, which ships to every generated project and now asserts real governance-file structure instead of `assertTrue(True)`.
 
 ## Quick Start
 
