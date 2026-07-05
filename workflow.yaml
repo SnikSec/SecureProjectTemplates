@@ -23,6 +23,14 @@ stages:
       - run-tests
     retries: 1
     requires_human_approval: false
+  - stage_id: stage-004
+    name: security-scan
+    actor: ci-runner
+    allowed_actions:
+      - gitleaks-scan
+      - semgrep-scan
+    retries: 0
+    requires_human_approval: false
 stop_conditions:
   max_iterations: 5
   max_writes: 10
