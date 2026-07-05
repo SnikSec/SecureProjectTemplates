@@ -1,0 +1,18 @@
+schema_version: "v1.0"
+repo_id: SecEng-CoreTemplates
+mission: Generate secure project scaffolding with pre-wired governance controls and CI checks for SecEng child repos.
+non_goals:
+  - Execute or approve changes in generated projects
+  - Store or process secrets on behalf of generated projects
+  - Enforce governance for repos it did not generate
+boundaries:
+  - compliance-tracking
+  - approval-gates
+  - data-classification
+risk_tier: low
+approval_triggers:
+  - template schema changes
+  - new language template addition
+notes: |
+  CoreTemplates produces static scaffold files rather than gating decisions, so its
+  risk tier is lower than the gating repos (PolicyEngine, DevilsAdvocate).

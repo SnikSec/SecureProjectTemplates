@@ -21,8 +21,9 @@ Planned next capabilities:
 ## Repository Layout
 
 - `src/seceng_templates/`: Python package for template generation logic and CLI.
-- `templates/python-secure/`: Reference Python template.
+- `templates/python-secure/`: Reference Python template (its own mission.yaml/policy.yaml/workflow.yaml are scaffold content shipped to generated projects, not this repo's self-hosting files).
 - `tools/`: Operational scripts and wrappers.
+- `mission.yaml`, `policy.yaml`, `workflow.yaml` (repo root): This repo's own self-hosted governance files, risk_tier `low` (static scaffolding, no gating authority).
 
 ## Quick Start
 
