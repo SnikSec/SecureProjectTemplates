@@ -7,7 +7,7 @@ install:
 	$(PYTHON) -m pip install -r requirements.txt
 
 lint:
-	$(PYTHON) -m flake8 src/ || true
+	$(PYTHON) -m ruff check src/ tests/
 
 test:
 	$(PYTHON) -m unittest discover -s tests

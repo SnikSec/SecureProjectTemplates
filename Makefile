@@ -15,4 +15,4 @@ test:
 	$(PYTHON) -m unittest discover -s tests -p "test_*.py" -v
 
 lint:
-	$(PYTHON) -m ruff check src/
+	$(PYTHON) -m ruff check src/ tests/
