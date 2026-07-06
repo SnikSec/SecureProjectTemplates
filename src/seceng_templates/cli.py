@@ -32,7 +32,9 @@ def build_parser() -> argparse.ArgumentParser:
     generate_cmd = subparsers.add_parser(
         "generate", help="Generate a secure project from template"
     )
-    generate_cmd.add_argument("--language", required=True, choices=["python"])
+    generate_cmd.add_argument(
+        "--language", required=True, choices=["python", "rust", "terraform"]
+    )
     generate_cmd.add_argument("--project-name", required=True)
     generate_cmd.add_argument("--output-dir", default=Path("."), type=Path)
 

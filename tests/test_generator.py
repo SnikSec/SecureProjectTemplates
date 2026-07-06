@@ -15,8 +15,10 @@ from seceng_templates.generator import TemplateGenerator  # noqa: E402
 
 class TestTemplateGeneratorValidate(unittest.TestCase):
     def test_known_language_template_exists(self):
-        gen = TemplateGenerator("python", Path(tempfile.mkdtemp()))
-        self.assertTrue(gen.validate())
+        for language in ("python", "rust", "terraform"):
+            with self.subTest(language=language):
+                gen = TemplateGenerator(language, Path(tempfile.mkdtemp()))
+                self.assertTrue(gen.validate())
 
     def test_unknown_language_template_does_not_exist(self):
         gen = TemplateGenerator("cobol", Path(tempfile.mkdtemp()))
@@ -33,14 +35,16 @@ class TestTemplateGeneratorGenerate(unittest.TestCase):
         self.assertFalse(gen.generate("some-project"))
 
     def test_generate_creates_governance_files(self):
-        gen = TemplateGenerator("python", self.tmp_dir)
-        self.assertTrue(gen.generate("my-secure-project"))
+        for language in ("python", "rust", "terraform"):
+            with self.subTest(language=language):
+                gen = TemplateGenerator(language, self.tmp_dir)
+                self.assertTrue(gen.generate(f"my-secure-{language}-project"))
 
-        project_dir = self.tmp_dir / "my-secure-project"
-        for expected in ("mission.yaml", "policy.yaml", "workflow.yaml", "README.md"):
-            self.assertTrue(
-                (project_dir / expected).exists(), f"missing {expected}"
-            )
+                project_dir = self.tmp_dir / f"my-secure-{language}-project"
+                for expected in ("mission.yaml", "policy.yaml", "workflow.yaml", "README.md"):
+                    self.assertTrue(
+                        (project_dir / expected).exists(), f"missing {expected}"
+                    )
 
     def test_generate_substitutes_project_name_placeholder(self):
         gen = TemplateGenerator("python", self.tmp_dir)
@@ -51,6 +55,24 @@ class TestTemplateGeneratorGenerate(unittest.TestCase):
             content = (project_dir / governance_file).read_text()
             self.assertNotIn("TEMPLATE_PROJECT_NAME", content)
             self.assertIn("my-secure-project", content)
+
+    def test_generate_substitutes_cargo_toml_package_name_for_rust(self):
+        gen = TemplateGenerator("rust", self.tmp_dir)
+        gen.generate("my-rust-project")
+        project_dir = self.tmp_dir / "my-rust-project"
+
+        content = (project_dir / "Cargo.toml").read_text()
+        self.assertNotIn("TEMPLATE_PROJECT_NAME", content)
+        self.assertIn("my-rust-project", content)
+
+    def test_generate_substitutes_variables_tf_default_for_terraform(self):
+        gen = TemplateGenerator("terraform", self.tmp_dir)
+        gen.generate("my-tf-project")
+        project_dir = self.tmp_dir / "my-tf-project"
+
+        content = (project_dir / "variables.tf").read_text()
+        self.assertNotIn("TEMPLATE_PROJECT_NAME", content)
+        self.assertIn("my-tf-project", content)
 
     def test_generate_overwrites_existing_project_directory(self):
         gen = TemplateGenerator("python", self.tmp_dir)

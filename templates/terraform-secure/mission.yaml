@@ -1,0 +1,13 @@
+schema_version: "v1.0"
+repo_id: TEMPLATE_PROJECT_NAME
+mission: Template mission for TEMPLATE_PROJECT_NAME.
+non_goals:
+  - Production deployment without approval
+  - Direct external tool integration
+boundaries:
+  - identity-and-auth
+  - data-classification
+  - approval-gates
+risk_tier: low
+approval_triggers:
+  - high-risk design changes

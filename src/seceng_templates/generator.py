@@ -40,8 +40,12 @@ class TemplateGenerator:
 
     def _update_metadata(self, project_dir: Path, project_name: str):
         """Update project name in configuration files."""
-        # Update mission.yaml, policy.yaml, workflow.yaml
-        for governance_file in ("mission.yaml", "policy.yaml", "workflow.yaml"):
+        # Update mission.yaml, policy.yaml, workflow.yaml, and any
+        # language-specific manifest that embeds the project name
+        # (Cargo.toml's package name, Terraform's variables.tf default).
+        for governance_file in (
+            "mission.yaml", "policy.yaml", "workflow.yaml", "Cargo.toml", "variables.tf",
+        ):
             path = project_dir / governance_file
             if path.exists():
                 content = path.read_text()
