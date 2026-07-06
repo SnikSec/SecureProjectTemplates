@@ -1,5 +1,10 @@
 # DESIGN_DECISIONS
 
+Some entries below cite `SecEng-Strategy/EXECUTION_PLAN.md`, an internal planning document kept in
+a private companion repo -- those citations won't resolve for external readers. The substantive
+rationale each citation points to is restated inline in the entry itself; the citation is there for
+this program's own cross-repo traceability, not as a required external reference.
+
 ## 2026-07-03 - Bootstrap SecEng-CoreTemplates with Python secure template
 - Status: accepted
 - Area: architecture
@@ -195,4 +200,13 @@
 - Why: This repo is on the same public-release track as Harness; the same reasoning applies identically. This repo's own `self-check` job was already the same shared pattern (Harness/PolicyEngine/Contracts checkout via the App token), unaffected by this repo's generated-template content.
 - Affected components: `.github/workflows/validate.yml` (`self-check` job removed), `README.md` (CI section, Status section).
 - Verification: `lint` and `test` confirmed still passing for real in CI after the push, with `self-check` genuinely absent (not skipped).
+- Follow-up: None open for this repo.
+
+## 2026-07-06 - Clean up internal-only / dead-link content ahead of public release
+- Status: accepted
+- Area: documentation
+- Decision: Fixed `NOTICE.md`'s dead link to a private Strategy doc (replaced with a self-contained clean-room statement), added a note to `README.md`'s "Checking a Real Change" section that `make check` depends on the private `SecEng-VSCodeAgent` and won't run out of the box for a fork, and added a disclosure note at the top of `DESIGN_DECISIONS.md` about its `EXECUTION_PLAN.md` citations. Full rationale in `SecEng-Harness/DESIGN_DECISIONS.md` (2026-07-06 entry, "Clean up internal-only / dead-link content ahead of public release").
+- Why: This repo is on the same public-release track as Harness and carried the identical copied content (`NOTICE.md`, the Makefile `check` target); the same reasoning applies identically. This repo's own `generated/` directory (gitignored since an earlier 2026-07-06 entry) and `templates/python-secure/` were re-checked and confirmed to carry no stray tracked run artifacts either.
+- Affected components: `NOTICE.md`, `README.md`, `DESIGN_DECISIONS.md` (header note).
+- Verification: Same checks as Harness's entry, run against this repo directly -- no personal paths, no stray tracked run artifacts, `ruff check`/tests unaffected.
 - Follow-up: None open for this repo.
