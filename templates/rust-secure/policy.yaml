@@ -1,0 +1,24 @@
+schema_version: "v1.0"
+policy_id: TEMPLATE_PROJECT_NAME-policy
+permitted_actions:
+  - read
+  - write
+blocked_actions:
+  - deploy-without-approval
+data_rules:
+  - data_class: public
+    allowed_destinations:
+      - local-workspace
+      - ci-runner
+destination_rules:
+  - destination: local-workspace
+    mode: allow
+    reason: Local development is in scope by default.
+  - destination: ci-runner
+    mode: allow
+    reason: CI validation is a required check for generated projects.
+approval_rules:
+  - trigger: high-risk design changes
+    required_approver: human-owner
+  - trigger: external integrations
+    required_approver: human-owner

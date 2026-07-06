@@ -1,16 +1,16 @@
 # Minimal Makefile for template projects.
-PYTHON ?= python
+TERRAFORM ?= terraform
 
 .PHONY: install lint test validate
 
 install:
-	$(PYTHON) -m pip install -r requirements.txt
+	$(TERRAFORM) init
 
 lint:
-	$(PYTHON) -m flake8 src/ || true
+	$(TERRAFORM) fmt -check -recursive || true
 
 test:
-	$(PYTHON) -m unittest discover -s tests
+	$(TERRAFORM) test
 
 validate:
 	@echo "All checks passed"

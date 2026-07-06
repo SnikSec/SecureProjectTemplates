@@ -1,16 +1,16 @@
 # Minimal Makefile for template projects.
-PYTHON ?= python
+CARGO ?= cargo
 
 .PHONY: install lint test validate
 
 install:
-	$(PYTHON) -m pip install -r requirements.txt
+	$(CARGO) fetch
 
 lint:
-	$(PYTHON) -m flake8 src/ || true
+	$(CARGO) clippy -- -D warnings || true
 
 test:
-	$(PYTHON) -m unittest discover -s tests
+	$(CARGO) test
 
 validate:
 	@echo "All checks passed"
