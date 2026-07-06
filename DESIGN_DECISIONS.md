@@ -210,3 +210,12 @@ this program's own cross-repo traceability, not as a required external reference
 - Affected components: `NOTICE.md`, `README.md`, `DESIGN_DECISIONS.md` (header note).
 - Verification: Same checks as Harness's entry, run against this repo directly -- no personal paths, no stray tracked run artifacts, `ruff check`/tests unaffected.
 - Follow-up: None open for this repo.
+
+## 2026-07-06 - Release tracking: add `__version__`, tag `v0.1.0`, declare `contracts-v1` compatibility
+- Status: accepted
+- Area: governance
+- Decision: This repo's own `src/seceng_templates/__init__.py` had no `__version__` at all despite Harness/PolicyEngine/DevilsAdvocate already carrying one -- added `__version__ = "0.1.0"` for consistency, then tagged this repo's current `dev` HEAD `v0.1.0` to match. Added a "Contracts compatibility: `contracts-v1`" line to the README's "Contracts and Tool Dependency" section. Full rationale in `SecEng-Strategy/DESIGN_DECISIONS.md` (2026-07-06 entry, "Implement release tracking").
+- Why: Same portfolio-wide decision as Harness; this repo was also missing both a `__version__` string and a git tag.
+- Affected components: `src/seceng_templates/__init__.py` (`__version__`, new), git tag `v0.1.0` (new), `README.md` (Contracts and Tool Dependency section).
+- Verification: `python -m unittest discover -s tests -p "test_*.py"` still 8/8 passing after the `__version__` addition. `git tag -l` and `git ls-remote --tags origin` confirm the tag exists locally and pushed.
+- Follow-up: None open for this repo.

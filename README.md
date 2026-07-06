@@ -88,6 +88,8 @@ Or run `make generate-example` for a ready-made Python example at `./generated/e
 
 - References `../SecEng-Contracts/schemas/` for mission and policy validation.
 - Expects `../SecEng-Harness/`, `../SecEng-PolicyEngine/`, `../SecEng-DevilsAdvocate/` as sibling repos for CI integration.
+- Contracts compatibility: `contracts-v1` (see `SecEng-Contracts`' own Versioning and Compatibility
+  Policy for what a MAJOR/MINOR/PATCH bump on that tag means for this repo).
 
 ## Checking a Real Change (`make check`)
 
