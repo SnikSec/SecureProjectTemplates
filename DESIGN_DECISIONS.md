@@ -178,3 +178,12 @@
 - Affected components: `README.md`.
 - Verification: Test count (8) cross-checked against `portfolio_status.py`'s real output before writing.
 - Follow-up: None open.
+
+## 2026-07-06 - Add NOTICE.md and CODEOWNERS (documentation gate's third expansion)
+- Status: accepted
+- Area: governance
+- Decision: Authored `NOTICE.md` (ORPHEUS attribution boilerplate, reused verbatim from `SecEng-Strategy/SECENG_AGENTIC_PROGRAM_DRAFT.md` Section 13) and `CODEOWNERS` (`* @SnikSec`) at repo root -- distinct from anything shipped inside `templates/python-secure/` (generated projects do not currently receive their own copies of these). Full rationale for this expansion (part of the user's comprehensive public-release directive covering all seven governed repos) is in `SecEng-PROrchestrator/DESIGN_DECISIONS.md` (2026-07-06 entry, "Expand the documentation gate a third time").
+- Why: This repo is one of the four named to go public in that directive; NOTICE.md and CODEOWNERS are both explicitly required before public release.
+- Affected components: `NOTICE.md` (new), `CODEOWNERS` (new), `README.md` (Repository Layout bullet).
+- Verification: `analyze --root-path <portfolio>` reports this repo `ready` after authoring both files. `make lint`/`make test` unaffected (docs-only change).
+- Follow-up: None open for this repo. Branch protection and visibility flip are tracked separately (PROrchestrator's task list).
