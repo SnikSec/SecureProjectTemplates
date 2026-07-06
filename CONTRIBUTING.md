@@ -9,7 +9,10 @@ rather than a maintained open-source project's usual cadence.
 
 ## Before Opening a Pull Request
 
-- Run `make lint` (flake8) and `make test` locally; both must pass.
+- Run `make lint` (Ruff) and `make test` locally; both must pass.
+- Copy `recommendation.yaml.example` to `recommendation.yaml` (gitignored) and fill in real claims,
+  evidence, and alternatives for your actual change, then run `make check` and read the result --
+  see the README's "Checking a Real Change" section for why this matters and what it actually does.
 - If your change alters behavior, architecture, tooling, or component boundaries, update
   `README.md` and `DESIGN_DECISIONS.md` as part of the same change -- see `AGENTS.md` for why this
   matters here specifically.
@@ -26,5 +29,6 @@ reporting process.
 
 ## Code Style
 
-- Python, `flake8` with `max-line-length = 100` (see `.flake8`).
+- Python, `ruff check` with `line-length = 100` (see `ruff.toml`; this repo's own root code only --
+  the shipped `templates/python-secure/` still uses flake8 for generated projects).
 - Tests use `unittest`, not `pytest`.

@@ -82,6 +82,18 @@ Or run `make generate-example` for a ready-made Python example at `./generated/e
 - References `../SecEng-Contracts/schemas/` for mission and policy validation.
 - Expects `../SecEng-Harness/`, `../SecEng-PolicyEngine/`, `../SecEng-DevilsAdvocate/` as sibling repos for CI integration.
 
+## Checking a Real Change (`make check`)
+
+`make check` runs `SecEng-VSCodeAgent`'s full evaluate pipeline (Harness + PolicyEngine +
+DevilsAdvocate) against this repo itself (not a generated project). It only means something if
+`recommendation.yaml` (repo root, gitignored) describes the actual change you're proposing -- copy
+`recommendation.yaml.example` to `recommendation.yaml` and fill in real claims/evidence/alternatives
+before running it. Without a real `recommendation.yaml`, DevilsAdvocate falls back to its own
+generic example recommendation and will predictably report `fail` regardless of what you actually
+did -- that fallback isn't a signal about your change, it's a reminder to write the file first.
+`make check` is informational only (not wired into a hook or CI gate yet); read the printed run
+bundle path for the full evidence/decision log.
+
 ## Status
 
 - Bootstrap created as part of execution-plan step from the strategy repo.

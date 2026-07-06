@@ -4,3 +4,4 @@ __pycache__/
 **/.seceng/evaluations/
 **/.seceng/runs/
 /generated/
+/recommendation.yaml
