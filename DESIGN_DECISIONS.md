@@ -187,3 +187,12 @@
 - Affected components: `NOTICE.md` (new), `CODEOWNERS` (new), `README.md` (Repository Layout bullet).
 - Verification: `analyze --root-path <portfolio>` reports this repo `ready` after authoring both files. `make lint`/`make test` unaffected (docs-only change).
 - Follow-up: None open for this repo. Branch protection and visibility flip are tracked separately (PROrchestrator's task list).
+
+## 2026-07-06 - Remove self-check from public CI
+- Status: accepted
+- Area: governance
+- Decision: Removed the `self-check` job from `.github/workflows/validate.yml`, keeping `lint` and `test` unchanged. Full rationale (public repos should be self-contained templates, not live dependents of the author's private GitHub App secrets and a still-private sibling repo) is recorded in `SecEng-Harness/DESIGN_DECISIONS.md` (2026-07-06 entry, "Remove self-check from public CI").
+- Why: This repo is on the same public-release track as Harness; the same reasoning applies identically. This repo's own `self-check` job was already the same shared pattern (Harness/PolicyEngine/Contracts checkout via the App token), unaffected by this repo's generated-template content.
+- Affected components: `.github/workflows/validate.yml` (`self-check` job removed), `README.md` (CI section, Status section).
+- Verification: `lint` and `test` confirmed still passing for real in CI after the push, with `self-check` genuinely absent (not skipped).
+- Follow-up: None open for this repo.
