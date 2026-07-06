@@ -79,3 +79,12 @@
 - Affected components: SECURITY.md (new, repo root), README.md (Repository Layout bullet).
 - Verification: `python tools/orchestrator.py analyze --root-path <portfolio>` (from SecEng-PROrchestrator) reports this repo as `ready`.
 - Follow-up: Whether generated projects (`templates/python-secure/`) should also get a `SECURITY.md` template file is a separate, not-yet-decided question -- this change only covers this repo's own root governance files, not what it generates.
+
+## 2026-07-06 - Add LICENSE and CONTRIBUTING.md (documentation gate expansion, repeat of option E)
+- Status: accepted
+- Area: governance
+- Decision: Added a root-level `LICENSE` (MIT, copyright SnikSec) and `CONTRIBUTING.md` (current-status note, pre-PR checklist pointing at `make lint`/`make test`/README+DESIGN_DECISIONS discipline, a pointer to SECURITY.md for vulnerability reports, plus a note that changes to `templates/python-secure/` should be verified against the generated project's own `make validate`). Full rationale for repeating the SECURITY.md pattern with these two files together, and for expanding `SecEng-PROrchestrator`'s `REQUIRED_FILES` to include them, is recorded in `SecEng-PROrchestrator/DESIGN_DECISIONS.md` (2026-07-06 entry) rather than duplicated here. Same as the SECURITY.md entry above, these are this repo's own root files, distinct from anything shipped inside `templates/python-secure/`.
+- Why: This repo's documentation gate compliance now depends on it; adding the files was the mechanical half of that portfolio-wide decision.
+- Affected components: LICENSE (new, repo root), CONTRIBUTING.md (new, repo root), README.md (Repository Layout bullet).
+- Verification: `python tools/orchestrator.py analyze --root-path <portfolio>` (from SecEng-PROrchestrator) reports this repo as `ready`.
+- Follow-up: Same open question as the SECURITY.md entry above -- whether generated projects should also receive their own LICENSE/CONTRIBUTING.md is not yet decided.
