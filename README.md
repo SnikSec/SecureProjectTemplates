@@ -24,7 +24,7 @@ Planned next capabilities:
 - `templates/python-secure/`: Reference Python template (its own mission.yaml/policy.yaml/workflow.yaml are scaffold content shipped to generated projects, not this repo's self-hosting files).
 - `tools/`: Operational scripts and wrappers.
 - `mission.yaml`, `policy.yaml`, `workflow.yaml` (repo root): This repo's own self-hosted governance files, risk_tier `low` (static scaffolding, no gating authority).
-- `SECURITY.md` (repo root): Vulnerability reporting policy, required by `SecEng-PROrchestrator`'s documentation gate (`REQUIRED_FILES`). Distinct from anything shipped inside `templates/python-secure/` -- generated projects do not currently receive their own `SECURITY.md`.
+- `SECURITY.md`, `LICENSE`, `CONTRIBUTING.md` (repo root): Required by `SecEng-PROrchestrator`'s documentation gate (`REQUIRED_FILES`). `LICENSE` is MIT. Distinct from anything shipped inside `templates/python-secure/` -- generated projects do not currently receive their own copies of these.
 - `tests/`: Real unit tests for `TemplateGenerator` itself (this repo's own generation logic). Run with `make test`. Distinct from `templates/python-secure/tests/`, which ships to every generated project and now asserts real governance-file structure instead of `assertTrue(True)`.
 - `.github/workflows/security-scan.yml`: Gitleaks (secret scanning) and Semgrep (SAST, `p/default` ruleset) run on every push/PR against this repo; fails on any Gitleaks hit or ERROR-severity Semgrep finding.
 - `templates/python-secure/.github/workflows/seceng-gate.yml`: now also runs Gitleaks and Semgrep in every generated project, matching this repo's own MVP-scope claim of "embedded security checks."
