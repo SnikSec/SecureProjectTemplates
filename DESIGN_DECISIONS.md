@@ -219,3 +219,12 @@ this program's own cross-repo traceability, not as a required external reference
 - Affected components: `src/seceng_templates/__init__.py` (`__version__`, new), git tag `v0.1.0` (new), `README.md` (Contracts and Tool Dependency section).
 - Verification: `python -m unittest discover -s tests -p "test_*.py"` still 8/8 passing after the `__version__` addition. `git tag -l` and `git ls-remote --tags origin` confirm the tag exists locally and pushed.
 - Follow-up: None open for this repo.
+
+## 2026-07-06 - Add THREAT_MODEL_AND_ETHICS.md (documentation gate's fourth expansion)
+- Status: accepted
+- Area: governance
+- Decision: Authored a real, repo-specific `THREAT_MODEL_AND_ETHICS.md` -- covering this repo's actual assets (a generated project's initial security posture) and the amplification risk unique to being a generator tool: a defect or weakened default here doesn't affect one repo, it affects every project generated from the flawed template afterward, silently, until fixed. Also documents the real, historical `flake8 src/ || true` silently-inert-check incident (found and fixed 2026-07-06) as a concrete example of this risk, not a hypothetical. Full rationale for the broader expansion is in `SecEng-PROrchestrator/DESIGN_DECISIONS.md` (2026-07-06 entry, "Expand the documentation gate a fourth time").
+- Why: Directly named in the user's public-release directive; this repo is one of the four named to go public.
+- Affected components: `THREAT_MODEL_AND_ETHICS.md` (new), `README.md` (governance-files bullet).
+- Verification: `analyze --root-path <portfolio>` reports this repo `ready` after authoring the file.
+- Follow-up: None open for this repo.
