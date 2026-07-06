@@ -96,4 +96,7 @@ bundle path for the full evidence/decision log.
 
 ## Status
 
-- Bootstrap created as part of execution-plan step from the strategy repo.
+- MVP complete: Python, Rust, and Terraform (IaC) secure template generators, each with a
+  governance-file validation test written in its own language, real generator tests (8 tests),
+  self-hosted governance files, and CI (lint, test, self-check) running for real.
+- Next planned capability: template versioning and upgrade paths (see MVP Scope above).
