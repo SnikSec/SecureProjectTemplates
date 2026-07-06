@@ -34,6 +34,7 @@ Planned next capabilities:
   `variables.tf`/`outputs.tf` expose the governance files' key fields so
   `tests/governance_files.tftest.hcl` (Terraform's native `terraform test` framework, 1.6+) can
   assert on them via `output.*` references.
+- `generated/`: Local-only output of `make generate-example` (a full example project for manual/CI-less sanity checks, e.g. before verifying template changes against `make validate` per `CONTRIBUTING.md`). Gitignored, not committed -- regenerate it locally rather than relying on a checked-in copy; see "Generated Project Features" below for what it contains.
 - `tools/`: Operational scripts and wrappers.
 - `mission.yaml`, `policy.yaml`, `workflow.yaml` (repo root): This repo's own self-hosted governance files, risk_tier `low` (static scaffolding, no gating authority).
 - `SECURITY.md`, `LICENSE`, `CONTRIBUTING.md` (repo root): Required by `SecEng-PROrchestrator`'s documentation gate (`REQUIRED_FILES`). `LICENSE` is MIT. Distinct from anything shipped inside `templates/python-secure/` -- generated projects do not currently receive their own copies of these.
@@ -64,6 +65,8 @@ python tools/generate.py generate --language terraform --project-name my-secure-
 cd my-project
 make validate
 ```
+
+Or run `make generate-example` for a ready-made Python example at `./generated/example-secure-app` (gitignored, local-only -- see "Repository Layout" above).
 
 ## Generated Project Features
 
