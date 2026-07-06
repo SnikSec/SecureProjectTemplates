@@ -41,7 +41,14 @@ Planned next capabilities:
 - `tests/`: Real unit tests for `TemplateGenerator` itself (this repo's own generation logic). Run with `make test`. Distinct from `templates/python-secure/tests/`, which ships to every generated project and now asserts real governance-file structure instead of `assertTrue(True)`.
 - `.github/workflows/security-scan.yml`: Gitleaks (secret scanning) and Semgrep (SAST, `p/default` ruleset) run on every push/PR against this repo; fails on any Gitleaks hit or ERROR-severity Semgrep finding.
 - `templates/python-secure/.github/workflows/seceng-gate.yml`: now also runs Gitleaks and Semgrep in every generated project, matching this repo's own MVP-scope claim of "embedded security checks."
-- `.github/workflows/validate.yml`: `lint` (`make lint`, Ruff -- this repo's own root lint tooling; the generated Python template's own `make lint` still uses flake8, see MVP Scope above), `test` (`make test`), and `self-check` (Harness validates this repo's own mission.yaml, plus an informational PolicyEngine decision). **Requires a GitHub App installed on SnikSec/SecEng-Harness, SecEng-PolicyEngine, and SecEng-Contracts** (Contents: Read-only) with `SIBLING_APPS_APP_ID` / `SIBLING_APPS_PRIVATE_KEY` secrets — see SecEng-Harness's README for the same note.
+- `.github/workflows/validate.yml`: `lint` (`make lint`, Ruff -- this repo's own root lint tooling;
+  the generated Python template's own `make lint` still uses flake8, see MVP Scope above) and `test`
+  (`make test`). No `self-check` job here -- this repo is on the public-release track, and
+  `self-check` depended on a private GitHub App token and on checking out a private sibling repo
+  (SecEng-Contracts), neither of which belongs in a public repo's CI (see `SecEng-Harness`'s
+  DESIGN_DECISIONS.md 2026-07-06 entry, "Remove self-check from public CI"). The equivalent
+  cross-repo validation this repo's own maintainer relies on is `make check` (see "Checking a Real
+  Change" below), run manually/privately rather than as a public CI gate.
 
 ## Quick Start
 
@@ -98,5 +105,5 @@ bundle path for the full evidence/decision log.
 
 - MVP complete: Python, Rust, and Terraform (IaC) secure template generators, each with a
   governance-file validation test written in its own language, real generator tests (8 tests),
-  self-hosted governance files, and CI (lint, test, self-check) running for real.
+  self-hosted governance files, and CI (lint, test) running for real.
 - Next planned capability: template versioning and upgrade paths (see MVP Scope above).
