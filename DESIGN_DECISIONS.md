@@ -70,3 +70,12 @@
 - Affected components: `SIBLING_APPS_PRIVATE_KEY` secret.
 - Verification: `gh run rerun --failed` after the fix: `self-check` passes, with real `VALID`/`NO DRIFT` output and an informational `DECISION: ALLOW`.
 - Follow-up: If this key is ever rotated, always use `gh secret set ... < file`, never paste manually -- see SecEng-Harness's DESIGN_DECISIONS.md for the full reasoning.
+
+## 2026-07-06 - Add SECURITY.md (documentation gate expansion, option E)
+- Status: accepted
+- Area: governance
+- Decision: Added a real root-level `SECURITY.md` (scope, supported-versions, GitHub private-vulnerability-reporting instructions, best-effort expectations note). Full rationale for why `SECURITY.md` specifically, and for expanding `SecEng-PROrchestrator`'s `REQUIRED_FILES` to include it, is recorded in `SecEng-PROrchestrator/DESIGN_DECISIONS.md` (2026-07-06 entry) rather than duplicated here. This repo's own root `SECURITY.md` is distinct from `templates/python-secure/`, which does not currently ship a `SECURITY.md` to generated projects.
+- Why: This repo's documentation gate compliance now depends on it; adding the file was the mechanical half of that portfolio-wide decision.
+- Affected components: SECURITY.md (new, repo root), README.md (Repository Layout bullet).
+- Verification: `python tools/orchestrator.py analyze --root-path <portfolio>` (from SecEng-PROrchestrator) reports this repo as `ready`.
+- Follow-up: Whether generated projects (`templates/python-secure/`) should also get a `SECURITY.md` template file is a separate, not-yet-decided question -- this change only covers this repo's own root governance files, not what it generates.
