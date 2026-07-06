@@ -134,3 +134,14 @@
 - Affected components: `.flake8` (removed), `ruff.toml` (new), `requirements.txt`, `Makefile` (`lint` target), `README.md` (CI description).
 - Verification: `ruff check src/` reports 0 findings. Full 8/8 test suite still passes. CI's `lint` job needed no workflow-file change and was verified green on the pushed commit.
 - Follow-up: Whether `templates/python-secure/`'s own shipped Makefile should also move to Ruff (affecting every future generated project, not just this repo) is a separate, not-yet-decided question.
+
+## 2026-07-06 - Wire evaluate into a real, non-blocking usage habit (`make check` + `recommendation.yaml`)
+- Status: accepted
+- Area: architecture
+- Decision: Added `recommendation.yaml.example` (documented template for the fields DevilsAdvocate's CLI actually reads: `id`, `claims`, `assumptions`, `evidence`, `alternatives`), `/recommendation.yaml` to `.gitignore` (per-change working draft, not durable history), and a `check` Makefile target (`python ../SecEng-VSCodeAgent/tools/vscode_agent.py evaluate --repo-path .`), plus README/CONTRIBUTING.md sections explaining the workflow. This is for this repo's own root governance, distinct from anything shipped inside `templates/python-secure/`. Full rationale, including real proof this closes an actual gap, is recorded in `SecEng-Harness/DESIGN_DECISIONS.md` (2026-07-06 entry) rather than duplicated here.
+- Why: Same portfolio-wide decision as the other five self-hosted repos, prompted directly by a question about whether any of this tooling is actually being used for real decisions rather than just tested.
+- Alternatives considered: See Harness's own entry.
+- Tradeoffs: None significant.
+- Affected components: `recommendation.yaml.example` (new, repo root), `.gitignore`, `Makefile` (`check` target), `README.md`/`CONTRIBUTING.md` (new section; also fixed a stale flake8 reference in CONTRIBUTING.md's "Code Style" section left behind by the earlier Ruff migration).
+- Verification: `make -n check` confirmed correct command substitution.
+- Follow-up: None open for this repo.
