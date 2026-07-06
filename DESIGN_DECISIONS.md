@@ -156,3 +156,14 @@
 - Affected components: this repo's own `Makefile` (`lint` target), `templates/python-secure/requirements.txt`, `templates/python-secure/ruff.toml` (new), `templates/python-secure/Makefile` (`lint` target).
 - Verification: `ruff check src/ tests/` reports 0 findings both for this repo's own root code and for the template source directly. Generated a real project via the actual CLI (`python tools/generate.py generate --language python --project-name demo-lint-check --output-dir <scratch>`) and confirmed `ruff check src/ tests/` (0 findings) and `python -m unittest discover -s tests` (8/8 passing) both work for real inside the generated project -- the first time `make lint` has ever done something real in a generated Python project. Scratch directory deleted after verification. This repo's own 8/8 test suite still passes.
 - Follow-up: A separate, unrelated dead dependency was noticed in the same file (`templates/python-secure/requirements.txt`'s `pytest==7.4.0`, never actually used -- the template's own tests run via `unittest`) and flagged as its own small spun-off task rather than fixed here, to keep this change scoped to the lint-tooling migration.
+
+## 2026-07-06 - Fix a stale README Status section
+- Status: accepted
+- Area: documentation
+- Decision: The "Status" section still read "Bootstrap created as part of execution-plan step from the strategy repo." Rewrote it to state actual current capability (Python/Rust/Terraform generators, each with a governance-file test written in its own language, 8 tests, CI) and the next planned capability (template versioning and upgrade paths).
+- Why: Found during a portfolio-wide README audit requested directly.
+- Alternatives considered: None -- factual correction.
+- Tradeoffs: None significant.
+- Affected components: `README.md`.
+- Verification: Test count (8) cross-checked against `portfolio_status.py`'s real output before writing.
+- Follow-up: None open.
