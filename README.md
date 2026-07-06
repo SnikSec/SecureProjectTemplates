@@ -99,7 +99,10 @@ before running it. Without a real `recommendation.yaml`, DevilsAdvocate falls ba
 generic example recommendation and will predictably report `fail` regardless of what you actually
 did -- that fallback isn't a signal about your change, it's a reminder to write the file first.
 `make check` is informational only (not wired into a hook or CI gate yet); read the printed run
-bundle path for the full evidence/decision log.
+bundle path for the full evidence/decision log. `SecEng-VSCodeAgent` (the orchestrator this target
+calls) is private, so `make check` won't run out of the box for an external fork -- it documents
+the author's own real usage habit and the evaluate pipeline's actual behavior; build an equivalent
+orchestrator against your own fork of the sibling repos to reproduce it.
 
 ## Status
 
