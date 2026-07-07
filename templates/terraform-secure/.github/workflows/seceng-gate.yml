@@ -8,11 +8,32 @@ jobs:
   harness-validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      # Requires a GitHub App installed on SnikSec/AlignmentHarness with
+      # Contents: Read-only, and its App ID / private key stored as the
+      # secrets below (same App used across the SnikSec governance repos).
+      - name: Mint sibling-repo access token
+        uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          repository: SecEng-Harness
+          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
+          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
+          owner: SnikSec
+          repositories: AlignmentHarness
+
+      - name: Checkout AlignmentHarness
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/AlignmentHarness
+          token: ${{ steps.app-token.outputs.token }}
           path: tools/harness
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Validate mission
         run: |
           cd tools/harness
@@ -22,36 +43,93 @@ jobs:
   policy-gate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Mint sibling-repo access token
+        uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          repository: SecEng-PolicyEngine
+          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
+          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
+          owner: SnikSec
+          repositories: RiskGate
+
+      - name: Checkout RiskGate
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/RiskGate
+          token: ${{ steps.app-token.outputs.token }}
           path: tools/policy-engine
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Read this project's declared risk tier
+        id: risk
+        # Reads the generated project's own mission.yaml instead of a hardcoded
+        # tier, so policy-gate actually reflects what this repo declares.
+        run: |
+          pip install -q pyyaml
+          RISK_TIER=$(python -c "import yaml; print(yaml.safe_load(open('mission.yaml'))['risk_tier'])")
+          echo "tier=$RISK_TIER" >> "$GITHUB_OUTPUT"
+
       - name: Evaluate policy
         run: |
           cd tools/policy-engine
           pip install -r requirements.txt
-          python tools/evaluate_policy.py evaluate --policy ../../policy.yaml --risk-tier low
+          python tools/evaluate_policy.py evaluate --policy ../../policy.yaml --action-category write --risk-tier ${{ steps.risk.outputs.tier }}
 
   devils-advocate:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Mint sibling-repo access token
+        uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          repository: SecEng-DevilsAdvocate
+          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
+          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
+          owner: SnikSec
+          repositories: DevilsAdvocate
+
+      - name: Checkout DevilsAdvocate
+        uses: actions/checkout@v4
+        with:
+          repository: SnikSec/DevilsAdvocate
+          token: ${{ steps.app-token.outputs.token }}
           path: tools/devils-advocate
-      - name: Challenge PR description
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Challenge this project's recommendation
+        # Falls back to DevilsAdvocate's own generic example recommendation
+        # (and a predictable fail verdict) if this project hasn't written its
+        # own recommendation.yaml yet -- copy recommendation.yaml.example to
+        # recommendation.yaml at repo root and fill in real claims/evidence
+        # first, same habit as every self-hosted SecEng repo's `make check`.
         run: |
           cd tools/devils-advocate
           pip install -r requirements.txt
-          echo "Recommendation challenge gate enabled"
+          RECOMMENDATION=../../recommendation.yaml
+          if [ ! -f "$RECOMMENDATION" ]; then
+            RECOMMENDATION=examples/recommendation.yaml
+          fi
+          python tools/challenge.py challenge --recommendation "$RECOMMENDATION" --risk-tier low
 
   gitleaks:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Gitleaks secret scan
@@ -62,7 +140,10 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Install Semgrep
         run: pip install semgrep
       - name: Semgrep SAST scan (fail on high-severity findings)

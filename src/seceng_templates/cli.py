@@ -26,7 +26,7 @@ def generate(
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="SecEng-CoreTemplates CLI")
+    parser = argparse.ArgumentParser(description="SecureProjectTemplates CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     generate_cmd = subparsers.add_parser(

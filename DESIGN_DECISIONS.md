@@ -5,6 +5,45 @@ a private companion repo -- those citations won't resolve for external readers. 
 rationale each citation points to is restated inline in the entry itself; the citation is there for
 this program's own cross-repo traceability, not as a required external reference.
 
+## 2026-07-07 - Fix the shipped seceng-gate.yml: it never actually worked against private siblings
+- Status: accepted
+- Area: governance
+- Decision: All three templates' (python-secure, rust-secure, terraform-secure) `seceng-gate.yml` --
+  plus the already-generated `generated/example-secure-app/` copy -- had three real bugs, found
+  while auditing the portfolio for public-release readiness: (1) `repository: SecEng-Harness` (and
+  PolicyEngine/DevilsAdvocate) had no org prefix and no auth token, so the checkout step would fail
+  outright against a private sibling repo -- the same class of bug already found and fixed in
+  AlignmentHarness/ComplianceRunner's own CI; (2) `policy-gate` hardcoded `--risk-tier low`
+  regardless of the generated project's actual declared risk_tier in its own mission.yaml; (3)
+  `devils-advocate` never called `challenge.py` at all -- it was a no-op `echo` string. Fixed all
+  three: added `create-github-app-token` minting (same `SIBLING_APPS_APP_ID`/
+  `SIBLING_APPS_PRIVATE_KEY` secrets pattern used elsewhere) with org-prefixed checkouts, added a
+  step that reads the real `risk_tier` out of `mission.yaml` and feeds it to `policy-gate`, and
+  wired `devils-advocate` to actually run `challenge.py` against the project's own
+  `recommendation.yaml` (falling back to DevilsAdvocate's example, same as `make check` elsewhere).
+  Also picked up the `gitleaks` job's missing `pull-requests: read` permission, the same fix already
+  applied across the other repos' `security-scan.yml`.
+- Why: This is the flagship "help others bootstrap governed AI-assisted projects" artifact --
+  shipping it with a CI gate that silently no-ops or fails on first use would undercut the entire
+  portfolio's credibility the moment someone actually tried it, which nothing had verified until
+  now.
+- Alternatives considered: Leaving the stale gate and just documenting the gap in a TODO (rejected
+  -- these are mechanical, already-solved-elsewhere bugs, not open design questions; fixing them is
+  the same amount of work as writing them up); regenerating `generated/example-secure-app/` from
+  scratch instead of patching its copy directly (rejected -- the fix is identical either way, and
+  patching in place avoids re-running the generator for a one-file change).
+- Tradeoffs: `rust-secure`'s corresponding `cargo build/test/clippy` path has still never been run
+  end-to-end on this machine (no Rust toolchain available) -- the YAML-level bugs are fixed, but
+  full verification of that template's CI remains open.
+- Affected components: `templates/python-secure/.github/workflows/seceng-gate.yml`,
+  `templates/rust-secure/.github/workflows/seceng-gate.yml`,
+  `templates/terraform-secure/.github/workflows/seceng-gate.yml`,
+  `generated/example-secure-app/.github/workflows/seceng-gate.yml`.
+- Verification: `python -m unittest discover -s tests -p "test_*.py"` -- 8/8 passing, unaffected by
+  this change (no test asserted on the old stale content).
+- Follow-up: Verify `rust-secure` end-to-end with a real Rust toolchain once one is available on a
+  dev machine.
+
 ## 2026-07-03 - Bootstrap SecEng-CoreTemplates with Python secure template
 - Status: accepted
 - Area: architecture

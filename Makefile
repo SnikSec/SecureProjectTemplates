@@ -6,7 +6,7 @@ install:
 	$(PYTHON) -m pip install -r requirements.txt
 
 check:
-	$(PYTHON) ../SecEng-VSCodeAgent/tools/vscode_agent.py evaluate --repo-path .
+	$(PYTHON) ../ComplianceRunner/tools/vscode_agent.py evaluate --repo-path .
 
 generate-example:
 	$(PYTHON) tools/generate.py generate --language python --project-name example-secure-app --output-dir ./generated

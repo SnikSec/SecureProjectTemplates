@@ -111,4 +111,9 @@ orchestrator against your own fork of the sibling repos to reproduce it.
 - MVP complete: Python, Rust, and Terraform (IaC) secure template generators, each with a
   governance-file validation test written in its own language, real generator tests (8 tests),
   self-hosted governance files, and CI (lint, test) running for real.
+- Fixed 2026-07-07: all three templates' shipped `seceng-gate.yml` had never actually worked
+  against a private sibling repo (missing org prefix/auth token), hardcoded `--risk-tier low`
+  regardless of the generated project's real mission.yaml, and never actually called DevilsAdvocate
+  (a no-op echo stub) -- see DESIGN_DECISIONS.md. `rust-secure`'s CI still hasn't been verified
+  end-to-end with a real Rust toolchain.
 - Next planned capability: template versioning and upgrade paths (see MVP Scope above).
