@@ -276,3 +276,24 @@ this program's own cross-repo traceability, not as a required external reference
 - Affected components: `.github/workflows/security-scan.yml` (`gitleaks` job `permissions:` block, added).
 - Verification: Re-ran the `gitleaks` check on the open PR after pushing the fix; confirmed it passes for real.
 - Follow-up: None open for this repo.
+
+## 2026-07-07 - Rename SecEng-CoreTemplates to SecureProjectTemplates
+- Status: accepted
+- Area: governance
+- Decision: Renamed this repo (GitHub + local) from `SecEng-CoreTemplates` to
+  `SecureProjectTemplates` as part of a portfolio-wide public-release naming cleanup -- dropping
+  the internal `SecEng-` prefix from every repo going public. Updated package docstring, CLI
+  description, `make check`'s ComplianceRunner reference, `mission.yaml`'s `repo_id`, and
+  `README.md`'s self-references. Landed in the same pass as the seceng-gate.yml CI fix (see the
+  entry above).
+- Why: `SecEng-CoreTemplates` reads as internal program plumbing; `SecureProjectTemplates` states
+  its actual role (secure project scaffolding generator) without requiring the reader to already
+  know what "SecEng" means.
+- Alternatives considered: Keeping `SecEng-` as the public prefix (rejected -- the user's own read
+  was that it wouldn't land well publicly); `GovernedTemplates` (rejected in favor of the name
+  chosen and confirmed directly).
+- Tradeoffs: None significant -- GitHub's automatic rename redirect covers old clone URLs.
+- Affected components: `src/seceng_templates/__init__.py`, `src/seceng_templates/cli.py`,
+  `Makefile`, `mission.yaml`, `README.md`.
+- Verification: 8/8 tests still passing; CI green on the renamed repo.
+- Follow-up: None open for this repo.

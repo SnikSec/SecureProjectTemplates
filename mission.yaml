@@ -1,5 +1,5 @@
 schema_version: "v1.0"
-repo_id: SecEng-CoreTemplates
+repo_id: SecureProjectTemplates
 mission: Generate secure project scaffolding with pre-wired governance controls and CI checks for SecEng child repos.
 non_goals:
   - Execute or approve changes in generated projects
