@@ -228,3 +228,12 @@ this program's own cross-repo traceability, not as a required external reference
 - Affected components: `THREAT_MODEL_AND_ETHICS.md` (new), `README.md` (governance-files bullet).
 - Verification: `analyze --root-path <portfolio>` reports this repo `ready` after authoring the file.
 - Follow-up: None open for this repo.
+
+## 2026-07-07 - Fix a real bug: gitleaks job missing `pull-requests: read` permission
+- Status: accepted
+- Area: tooling
+- Decision: Same bug and fix as `SecEng-PolicyEngine`'s matching 2026-07-07 entry: the `gitleaks` job in `.github/workflows/security-scan.yml` failed with a 403 calling the PR-commits API on the first-ever `dev`->`main` PR against this repo, since it had no `permissions:` block. Added `permissions: {contents: read, pull-requests: read}`, matching `SecEng-Harness`'s already-correct config. This is the repo where the failure was first actually observed (`gh pr checks` showed `gitleaks: fail` on a re-run after an initial `pass`), which is what prompted checking all three sibling repos and finding they shared the same gap.
+- Why: See PolicyEngine's entry -- this had never been caught because CI here was push-only until today.
+- Affected components: `.github/workflows/security-scan.yml` (`gitleaks` job `permissions:` block, added).
+- Verification: Re-ran the `gitleaks` check on the open PR after pushing the fix; confirmed it passes for real.
+- Follow-up: None open for this repo.
