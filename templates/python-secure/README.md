@@ -1,6 +1,6 @@
 # Template Project
 
-Secure Python project scaffolded by SecEng-CoreTemplates.
+Secure Python project scaffolded by SecureProjectTemplates.
 
 ## Project Structure
 

@@ -2,7 +2,7 @@
 
 Verifies the governance files this template ships (mission.yaml, policy.yaml,
 workflow.yaml) are present, parse as YAML, and carry the fields required by
-SecEng-Contracts' schemas, and that project-name substitution actually ran.
+GovernanceContracts' schemas, and that project-name substitution actually ran.
 
 This file is shipped verbatim into every generated project by
 TemplateGenerator, but it also lives here in the template source, where

@@ -2,7 +2,7 @@
 
 ## Scope
 
-SecEng-CoreTemplates generates secure project scaffolding (Python today; Rust and IaC planned) with
+SecureProjectTemplates generates secure project scaffolding (Python today; Rust and IaC planned) with
 governance controls baked in as required CI jobs. It is part of a personal security-engineering
 research portfolio (the SecEng program), not a production service with an SLA. Real
 vulnerabilities are still worth reporting; this repo is just not a monitored production system.

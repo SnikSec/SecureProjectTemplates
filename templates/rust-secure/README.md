@@ -1,6 +1,6 @@
 # Template Project
 
-Secure Rust project scaffolded by SecEng-CoreTemplates.
+Secure Rust project scaffolded by SecureProjectTemplates.
 
 ## Project Structure
 

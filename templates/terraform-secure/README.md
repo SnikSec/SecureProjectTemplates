@@ -1,6 +1,6 @@
 # Template Project
 
-Secure Terraform (IaC) module scaffolded by SecEng-CoreTemplates.
+Secure Terraform (IaC) module scaffolded by SecureProjectTemplates.
 
 ## Project Structure
 
