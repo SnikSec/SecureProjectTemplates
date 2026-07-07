@@ -1,5 +1,5 @@
 schema_version: "v1.0"
-workflow_id: example-secure-app-workflow
+workflow_id: TEMPLATE_PROJECT_NAME-workflow
 complexity_level: chained
 stages:
   - stage_id: stage-001

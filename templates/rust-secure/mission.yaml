@@ -1,6 +1,6 @@
 schema_version: "v1.0"
-repo_id: example-secure-app
-mission: Template mission for example-secure-app.
+repo_id: TEMPLATE_PROJECT_NAME
+mission: Template mission for TEMPLATE_PROJECT_NAME.
 non_goals:
   - Production deployment without approval
   - Direct external tool integration

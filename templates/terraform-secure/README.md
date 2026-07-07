@@ -1,11 +1,13 @@
 # Template Project
 
-Secure Python project scaffolded by SecureProjectTemplates.
+Secure Terraform (IaC) module scaffolded by SecureProjectTemplates.
 
 ## Project Structure
 
-- `src/`: Application source code.
-- `tests/`: Unit and integration tests.
+- `main.tf`: Root module; intentionally provisions nothing until real resources are added.
+- `variables.tf`, `outputs.tf`: Module inputs/outputs.
+- `tests/`: Native `terraform test` suite, including governance-file validation
+  (`governance_files.tftest.hcl`).
 - `mission.yaml`: Project mission, scope, and boundaries.
 - `workflow.yaml`: CI/CD workflow definition.
 - `policy.yaml`: Governance and approval rules.

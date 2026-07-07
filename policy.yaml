@@ -1,5 +1,5 @@
 schema_version: "v1.0"
-policy_id: SecEng-CoreTemplates-policy
+policy_id: SecureProjectTemplates-policy
 permitted_actions:
   - read-template
   - generate-project

@@ -1,0 +1,46 @@
+# Template for recommendation.yaml -- describes the specific change you're about
+# to make (or just made) in THIS repo, so `make check` (SecEng-VSCodeAgent's
+# evaluate command) challenges something real instead of falling back to
+# SecEng-DevilsAdvocate's shared examples/recommendation.yaml.
+#
+# Copy this file to recommendation.yaml (gitignored -- it's a per-change working
+# draft, not durable history; the durable record is your DESIGN_DECISIONS.md
+# entry) and fill it in before running `make check`.
+#
+# Only these five fields are actually read by DevilsAdvocate's challenge command
+# (src/seceng_devils_advocate/cli.py): id, claims, assumptions, evidence,
+# alternatives. Everything else here is for a human reading the file, not
+# consumed by the tool.
+#
+# Verdict logic (see SecEng-DevilsAdvocate/src/seceng_devils_advocate/challenge.py):
+# a claim only counts as "supported" if it appears verbatim (exact string match)
+# in evidence[].claim with a non-empty evidence[].source. Unsupported claims push
+# the verdict toward conditional-pass/fail, scaled by this repo's own risk_tier
+# (see mission.yaml) -- higher risk_tier tolerates fewer unsupported claims.
+
+id: rec-CHANGE-NAME-YYYY-MM-DD
+
+title: One-line description of the change
+
+claims:
+  # Assertions you're making about why this change is good/safe/correct.
+  # Each one you can actually back up should have a matching entry in evidence[]
+  # below with the EXACT SAME TEXT.
+  - Claim one, stated as a factual assertion
+  - Claim two
+
+assumptions:
+  # Things you're taking for granted that aren't independently verified here.
+  - Assumption one
+
+evidence:
+  # One entry per claim you can support. "source" must be non-empty for the
+  # claim to count as supported -- a real command output, CI run, test result,
+  # or file/line reference, not a vague restatement of the claim.
+  - claim: Claim one, stated as a factual assertion
+    source: "e.g. `make test` output, a CI run URL, or a specific file/line"
+    confidence: high
+
+alternatives:
+  # What else you considered and didn't do, even briefly.
+  - Alternative approach (rejected because ...)

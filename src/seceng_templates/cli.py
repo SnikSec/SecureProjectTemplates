@@ -21,18 +21,20 @@ def generate(
         print(f"Location: {output_dir / project_name}")
         return 0
     else:
-        print(f"ERROR: Failed to generate project")
+        print("ERROR: Failed to generate project")
         return 1
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="SecEng-CoreTemplates CLI")
+    parser = argparse.ArgumentParser(description="SecureProjectTemplates CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     generate_cmd = subparsers.add_parser(
         "generate", help="Generate a secure project from template"
     )
-    generate_cmd.add_argument("--language", required=True, choices=["python"])
+    generate_cmd.add_argument(
+        "--language", required=True, choices=["python", "rust", "terraform"]
+    )
     generate_cmd.add_argument("--project-name", required=True)
     generate_cmd.add_argument("--output-dir", default=Path("."), type=Path)
 

@@ -1,14 +1,15 @@
-# Example-Secure-App
+# Template Project
 
-Secure Python project scaffolded by SecEng-CoreTemplates.
+Secure Rust project scaffolded by SecureProjectTemplates.
 
 ## Project Structure
 
 - `src/`: Application source code.
-- `tests/`: Unit and integration tests.
+- `tests/`: Integration tests, including governance-file validation (`governance_files.rs`).
 - `mission.yaml`: Project mission, scope, and boundaries.
 - `workflow.yaml`: CI/CD workflow definition.
 - `policy.yaml`: Governance and approval rules.
+- `Cargo.toml`: Rust package manifest and dependencies.
 - `Makefile`: Build, test, and validation targets.
 - `.github/workflows/`: GitHub Actions CI configuration.
 
