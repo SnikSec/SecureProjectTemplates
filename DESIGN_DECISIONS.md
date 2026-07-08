@@ -297,3 +297,33 @@ this program's own cross-repo traceability, not as a required external reference
   `Makefile`, `mission.yaml`, `README.md`.
 - Verification: 8/8 tests still passing; CI green on the renamed repo.
 - Follow-up: None open for this repo.
+
+## 2026-07-08 - Verify rust-secure with a real Rust toolchain (partial: check/clippy clean, tests blocked by missing linker)
+- Status: accepted
+- Area: verification
+- Decision: Installed a real Rust toolchain (rustup via winget) and generated a real project from
+  the rust-secure template (`generate.py generate --language rust`). `cargo check` and
+  `cargo clippy -- -D warnings` both pass clean on the generated project's main binary -- confirms
+  the template's actual Rust source is valid, type-correct, and lint-clean. `cargo check --tests`
+  (and by extension `cargo test`) fails, but not because of anything in the template: this machine
+  has no C linker at all -- neither MSVC (`link.exe`) nor MinGW GCC -- and the dev-dependencies
+  (`serde`/`serde_yaml`, needed by `tests/governance_files.rs`) use proc-macro build scripts that
+  must be compiled and executed even just to typecheck the tests. Asked whether to install a
+  linker (lightweight MinGW-w64 or full MSVC Build Tools) to complete verification; declined --
+  check/clippy passing is accepted as sufficient.
+- Why: This closes the follow-up flagged in the 2026-07-07 CI-fix entry ("verify rust-secure
+  end-to-end with a real Rust toolchain once one is available") as far as it reasonably can without
+  a larger, separate decision to install system-level C build tooling this machine has never had.
+- Alternatives considered: Installing a linker to run the full test suite (offered, declined --
+  the real value already gotten from check/clippy is confirmation that the template's Rust code
+  itself is sound; a linker install is a separate, larger environment change not currently
+  justified by this one verification task).
+- Tradeoffs: `tests/governance_files.rs` has still never actually been executed on this machine --
+  only proven to typecheck-adjacent-when-a-linker-exists is unconfirmed. The template's CI (GitHub
+  Actions, which does have a full toolchain) is the actual source of truth for whether these tests
+  pass; this was a local, supplementary check, not a replacement for CI.
+- Affected components: None (verification only, no code changed).
+- Verification: `cargo check` -- clean. `cargo clippy -- -D warnings` -- clean, 0 warnings.
+  `cargo check --tests` -- fails with a linker error unrelated to template content (confirmed via
+  the exact same failure on `serde`/`proc-macro2`'s own build scripts, not this template's code).
+- Follow-up: None open -- this was the last open item from the earlier CI-fix entry.
