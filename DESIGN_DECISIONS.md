@@ -327,3 +327,31 @@ this program's own cross-repo traceability, not as a required external reference
   `cargo check --tests` -- fails with a linker error unrelated to template content (confirmed via
   the exact same failure on `serde`/`proc-macro2`'s own build scripts, not this template's code).
 - Follow-up: None open -- this was the last open item from the earlier CI-fix entry.
+
+## 2026-07-08 - Drop the GitHub App token requirement from seceng-gate.yml now that siblings are public
+- Status: accepted
+- Area: governance
+- Decision: Removed the `create-github-app-token` minting step and `token:` parameter from all
+  three templates' (python-secure, rust-secure, terraform-secure) shipped `seceng-gate.yml` --
+  `AlignmentHarness`, `RiskGate`, and `DevilsAdvocate` are public now, so checking them out needs no
+  authentication at all. Each checkout step is now a plain `actions/checkout@v4` with
+  `repository: SnikSec/<repo>` and nothing else.
+- Why: This template is the actual mechanism for making sure new projects leverage the SecEng
+  toolset -- but the shipped CI still required `SIBLING_APPS_APP_ID`/`SIBLING_APPS_PRIVATE_KEY`
+  secrets to check out repos that anyone can now clone with zero auth. That meant every new project
+  needed those secrets configured before its CI would even run, and anyone outside this account
+  trying the template would hit a hard failure they have no way to fix (they can't get this
+  account's App secrets, and don't need to). Public repos make the App-token machinery pure
+  dead weight now.
+- Alternatives considered: Leaving the App-token pattern in place for consistency with the private
+  self-hosted repos' own `validate.yml` (rejected -- those repos check out *each other*, which is a
+  different, still-legitimately-private relationship; this template checks out repos that are
+  specifically meant to be consumed by the public, which is the whole point of them being public).
+- Tradeoffs: None significant. If any of the three sibling repos ever goes private again, this
+  would need reverting -- unlikely, but worth remembering if that ever comes up.
+- Affected components: `templates/python-secure/.github/workflows/seceng-gate.yml`,
+  `templates/rust-secure/.github/workflows/seceng-gate.yml`,
+  `templates/terraform-secure/.github/workflows/seceng-gate.yml`.
+- Verification: 8/8 tests still passing (no test asserted on the App-token content). Diffed all
+  three templates' seceng-gate.yml to confirm they stayed identical after the edit.
+- Follow-up: None open.
