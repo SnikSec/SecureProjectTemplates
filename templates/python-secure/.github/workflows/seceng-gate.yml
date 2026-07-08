@@ -11,23 +11,11 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
-      # Requires a GitHub App installed on SnikSec/AlignmentHarness with
-      # Contents: Read-only, and its App ID / private key stored as the
-      # secrets below (same App used across the SnikSec governance repos).
-      - name: Mint sibling-repo access token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
-          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
-          owner: SnikSec
-          repositories: AlignmentHarness
-
+      # AlignmentHarness is public -- no token needed to check it out.
       - name: Checkout AlignmentHarness
         uses: actions/checkout@v4
         with:
           repository: SnikSec/AlignmentHarness
-          token: ${{ steps.app-token.outputs.token }}
           path: tools/harness
 
       - uses: actions/setup-python@v5
@@ -46,20 +34,11 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
-      - name: Mint sibling-repo access token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
-          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
-          owner: SnikSec
-          repositories: RiskGate
-
+      # RiskGate is public -- no token needed to check it out.
       - name: Checkout RiskGate
         uses: actions/checkout@v4
         with:
           repository: SnikSec/RiskGate
-          token: ${{ steps.app-token.outputs.token }}
           path: tools/policy-engine
 
       - uses: actions/setup-python@v5
@@ -88,20 +67,11 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
-      - name: Mint sibling-repo access token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ secrets.SIBLING_APPS_APP_ID }}
-          private-key: ${{ secrets.SIBLING_APPS_PRIVATE_KEY }}
-          owner: SnikSec
-          repositories: DevilsAdvocate
-
+      # DevilsAdvocate is public -- no token needed to check it out.
       - name: Checkout DevilsAdvocate
         uses: actions/checkout@v4
         with:
           repository: SnikSec/DevilsAdvocate
-          token: ${{ steps.app-token.outputs.token }}
           path: tools/devils-advocate
 
       - uses: actions/setup-python@v5
